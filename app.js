@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Blog = require('./models/blogs');
+const weather= require('./models/weatherDetails')
 var axios= require("axios").default ;
 const dotenv = require('dotenv').config()
 const app = express();
@@ -73,7 +74,7 @@ app.get('/blogs/:id', (req, res) => {
 var options = {
   method: 'GET',
   url: process.env.API ,
-  params: {q: 'cairo', days:'3'},
+  params: {q: 'cairo'},
   headers: {
     'x-rapidapi-host': process.env.host,
     'x-rapidapi-key': process.env.key
@@ -88,6 +89,19 @@ axios.request(options).then(function (response) {
        var m=response.data.location.localtime;
        var n=response.data.current.wind_degree;
        var o=response.data.current.cloud;
+
+       const maram = new weather ({
+        name:x,
+        country:y,
+        Temp:z,
+        LocalTime:m,
+        winddegree:n,
+        cloud:o,
+
+      });
+      console.log(maram);
+      maram.save().catch (err=> {console.log(err);})
+
         res.render('weather',{title:'the weather', x,y,z,m,n,o});
     })
     .catch(function (error) {
