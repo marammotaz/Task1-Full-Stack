@@ -1,16 +1,15 @@
 const express = require('express');
-//const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Blog = require('./models/blogs');
 var axios= require("axios").default ;
-
+const dotenv = require('dotenv').config()
 const app = express();
 
 // connect to mongodb & listen for requests
-const dbURI = "mongodb+srv://maram:maram123@cluster0.ybd7z.mongodb.net/test?retryWrites=true&w=majority";
+const dbURI = process.env.URI;
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => app.listen(3000))
+  .then(result => app.listen(process.env.port))
   .catch(err => console.log(err));
 
 // register view engine
@@ -19,7 +18,6 @@ app.set('view engine', 'ejs');
 // middleware & static files
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-//app.use(morgan('dev'));
 app.use((req, res, next) => {
   res.locals.path = req.path;
   next();
@@ -34,8 +32,6 @@ app.get('/about', (req, res) => {
   res.render('about', { title: 'About' });
 });
 
-
-// blog routes
 app.get('/blogs/create', (req, res) => {
   res.render('create', { title: 'Create a new blog' });
 });
@@ -51,7 +47,6 @@ app.get('/blogs', (req, res) => {
 });
 
 app.post('/blogs', (req, res) => {
-  // console.log(req.body);
   const blog = new Blog(req.body);
 
   blog.save()
@@ -77,11 +72,11 @@ app.get('/blogs/:id', (req, res) => {
 
 var options = {
   method: 'GET',
-  url: 'https://weatherapi-com.p.rapidapi.com/timezone.json',
-  params: {q: 'cairo'},
+  url: process.env.API ,
+  params: {q: 'cairo', days:'3'},
   headers: {
-    'x-rapidapi-host': 'weatherapi-com.p.rapidapi.com',
-    'x-rapidapi-key': '550d5c0adbmshef0d5eeb82e44dap1f663cjsn71ba1944d4b6'
+    'x-rapidapi-host': process.env.host,
+    'x-rapidapi-key': process.env.key
   }
 };
 app.get('/weather', (req,res)=>{
@@ -89,19 +84,16 @@ axios.request(options).then(function (response) {
 	
        var x=response.data.location.name;
        var y=response.data.location.country;
-       var z=response.data.location.lat;
+       var z=response.data.current.temp_c;
        var m=response.data.location.localtime;
-       
-        res.render('weather',{x,y,z,m});
+       var n=response.data.current.wind_degree;
+       var o=response.data.current.cloud;
+        res.render('weather',{title:'the weather', x,y,z,m,n,o});
     })
     .catch(function (error) {
       console.error(error);
     });
 })
-
-
-
-
 
 // 404 page
 app.use((req, res) => {

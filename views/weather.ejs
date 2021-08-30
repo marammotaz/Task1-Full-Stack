@@ -1,16 +1,22 @@
 <html lang="en">
-  
+<%- include("./partials/head.ejs") %>
 
 <body>
-  
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="weather">
     <h2>The weather</h2>
-   <br>
-    <ul><li><%= x%></li>
-        <li><%= y%></li>
-        <li><%= z%></li>
-        <li><%= m%></li>
+    <br>
+    <ul>
+        <li><h3>name:</h3><%= x%></li>
+        <li><h3>Country:</h3><%= y%></li>
+        <li><h3>Temp:</h3><%= z%></li>
+        <li><h3>Local Time:</h3><%= m%></li>
+        <li><h3>Wind Degree:</h3><%= n%></li>
+        <li><h3>Cloud:</h3><%= o%></li>
     </ul>
-  
-    
+     </div>
+
+  <%- include("./partials/footer.ejs") %>
 </body>
 </html>

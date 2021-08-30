@@ -4,11 +4,16 @@
 <body>
   <%- include("./partials/nav.ejs") %>
 
-  <div class="about content">
-    <h2>About Us</h2>
-    <p>here should be the details</p>
-   </div>
+  <div class="details content">
+    <h2><%= blog.title %></h2>
+    <div class="content">
+      <p><%= blog.body %></p>
+    </div>
+    
+  </div>
 
   <%- include("./partials/footer.ejs") %>
+
+  
 </body>
 </html>
