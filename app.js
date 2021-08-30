@@ -94,7 +94,7 @@ axios.request(options).then(function (response) {
         cloud:o,
 
       });
-      console.log(maram);
+  
       maram.save().catch (err=> {console.log(err);})
 
         res.render('weather',{title:'the weather', x,y,z,m,n,o});
